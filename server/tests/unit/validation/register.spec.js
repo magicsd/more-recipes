@@ -83,4 +83,50 @@ describe('RegisterUserValidator class', () => {
       expect(validator.errors).toContain('A user with this email already exists.');
     })
   });
+
+  describe('isValid Function Test', () => {
+    test('Should return false if there are any errors in the errors array', async () => {
+      const validator = new RegisterUserValidator({
+        name: 'Alex',
+        email: 'sd@alexdus',
+        password: '12345',
+      });
+
+      const validationResult = await validator.isValid();
+
+      expect(validationResult).toBeFalsy();
+    });
+
+    test('Should return true if validation passed', async () => {
+      await User.destroy({ where: {} });
+
+      const validator = new RegisterUserValidator({
+        name: 'Alex Dus',
+        email: 'sd@alexdus.com',
+        password: 'pass12345',
+      });
+
+      const validationResult = await validator.isValid();
+
+      expect(validationResult).toBeTruthy();
+    });
+
+    test('Should call validateName, validatePassword, validateEmail functions', async () => {
+      const validator = new RegisterUserValidator({
+        name: 'Alex',
+        email: 'sd@alexdus',
+        password: '12345',
+      });
+
+      jest.spyOn(validator, 'validateName');
+      jest.spyOn(validator, 'validateEmail');
+      jest.spyOn(validator, 'validatePassword');
+
+      await validator.isValid();
+
+      expect(validator.validateEmail).toHaveBeenCalled();
+      expect(validator.validateName).toHaveBeenCalled();
+      expect(validator.validatePassword).toHaveBeenCalled();
+    })
+  });
 });
