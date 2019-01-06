@@ -3,8 +3,8 @@ import { Recipe } from '../../../database/models';
 import app from '../../../index';
 import { generateUser, generateRecipe } from '../../utils/generate';
 
-describe('Delete Recipe Endpoint', () => {
-  test('Should delete recipe from database and return a message', async () => {
+describe('Update Recipe Tests', () => {
+  test('Should update recipe successfully', async () => {
     const { user, token } = await generateUser();
 
     const fakeRecipe = generateRecipe();
@@ -14,15 +14,19 @@ describe('Delete Recipe Endpoint', () => {
       userId: user.id,
     });
 
+    const updatedRecipe = generateRecipe();
+
     const { status, body } = await supertest(app)
-      .delete(`/api/v1/recipes/${recipe.id}`)
-      .send({ access_token: token });
+      .put(`/api/v1/recipes/${recipe.id}`)
+      .send({
+        access_token: token,
+        ...updatedRecipe,
+      });
 
     expect(status).toBe(200);
-    expect(body.data.message).toBe('Recipe deleted.');
 
-    const recipeFromDatabase = await Recipe.findAll({ where: { id: recipe.id }});
+    const recipeFromDatabase = await Recipe.findById(recipe.id);
 
-    expect(recipeFromDatabase.length).toBe(0);
+    expect(recipeFromDatabase.title).toBe(updatedRecipe.title);
   });
-});
+})

@@ -1,5 +1,4 @@
 import supertest from 'supertest';
-import faker from 'faker';
 import { Recipe } from '../../../database/models';
 import app from '../../../index';
 import { generateUser, generateRecipe } from '../../utils/generate';
