@@ -58,6 +58,10 @@ export default isValidEmail;
  * @returns {Recipe} recipe with upvotes, downvotes and favorites attributes
  */
 export async function updateRecipeAttributes(sequelizeRecipe) {
+  if (!sequelizeRecipe) {
+    return null;
+  }
+  
   const recipe = sequelizeRecipe.get();
 
   const upvotersIds = await redisClient.smembers(`recipe:${recipe.id}:upvotes`);

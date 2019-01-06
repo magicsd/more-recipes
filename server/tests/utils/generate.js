@@ -13,13 +13,13 @@ export const generateToken = (email) => {
 export const generateUser = async () => {
   const password = faker.internet.password();
 
-  const user = {
+  const fakeUser = {
     name: faker.name.findName(),
     email: faker.internet.email(),
     password: bcrypt.hashSync(password, 1),
   };
 
-  await User.create(user);
+  const user = await User.create(fakeUser);
 
   const token = generateToken(user.email);
 
