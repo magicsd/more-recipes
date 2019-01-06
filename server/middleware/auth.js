@@ -21,6 +21,7 @@ export default async (req, res, next) => {
       req.authUserObj = user;
       return next();
     }
+    throw new Error();
   } catch (error) {
     return res.sendFailureResponse({ message: 'Unauthenticated.' }, 401);
   }

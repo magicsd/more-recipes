@@ -36,10 +36,11 @@ describe('Register User Validator Middleware', () => {
 
     const response = { sendFailureResponse };
 
-    const next = () => {};
+    const next = jest.fn();
 
     await registerUserValidator(request, response, next);
 
     expect(sendFailureResponse).toHaveBeenCalled();
+    expect(next).toHaveBeenCalledTimes(0);
   });
 });
