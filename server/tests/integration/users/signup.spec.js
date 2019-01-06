@@ -3,9 +3,11 @@ import { User } from '../../../database/models';
 import app from '../../../index';
 
 describe('User Sign Up Tests', () => {
-  test('Should register a new user', async () => {
+  beforeEach(async () => {
     await User.destroy({ where: {} });
+  });
 
+  test('Should register a new user', async () => {
     const fakeUser = {
       name: 'Alex Dus',
       password: 'password',
@@ -32,8 +34,6 @@ describe('User Sign Up Tests', () => {
       password: 'password',
       email: 'sd@alexdus.com',
     };
-
-    await User.destroy({ where: {} });
 
     await User.create(userData);
 
