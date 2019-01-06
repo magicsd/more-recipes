@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import faker from 'faker';
 import middleware from '../../../middleware';
 import { User } from '../../../database/models';
 import config from '../../../config';
@@ -8,11 +9,9 @@ const { JWT_SECRET } = config;
 
 describe('Auth Middleware Tests', () => {
   test('Should call "next" if user is authenticated', async () => {
-    await User.destroy({ where: {} });
-
     const { email } = await User.create({
       name: 'Alex Dus',
-      email: 'sd@alexdus.com',
+      email: faker.internet.email(),
       password: 'password',
     });
 
@@ -33,12 +32,10 @@ describe('Auth Middleware Tests', () => {
   });
 
   test('Should run "sendFailureResponse" function if not authenticated', async () => {
-    await User.destroy({ where: {} });
-
     const { email } = await User.create({
       name: 'Alex',
       password: '123',
-      email: 'sd@alexdus',
+      email: faker.internet.email(),
     });
 
     const request = {
@@ -61,7 +58,7 @@ describe('Auth Middleware Tests', () => {
   test('Should throw an error if the user is not found', async () => {
     const request = {
       body: {
-        access_token: jwt.sign({ email: 'dd@alexdus.com'}, JWT_SECRET),
+        access_token: jwt.sign({ email: faker.internet.email()}, JWT_SECRET),
       },
     };
 

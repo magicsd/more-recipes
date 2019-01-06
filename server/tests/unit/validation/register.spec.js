@@ -1,3 +1,4 @@
+import faker from 'faker';
 import validators from '../../../validators';
 import { User } from '../../../database/models';
 
@@ -66,9 +67,7 @@ describe('RegisterUserValidator class', () => {
     });
 
     test('Should add an error to errors array if the email is already in db', async () => {
-      await User.destroy({ where: {} });
-
-      const email = 'sd@alexdus.com';
+      const email = faker.internet.email();
 
       await User.create({
         name: 'Alex',
@@ -98,11 +97,9 @@ describe('RegisterUserValidator class', () => {
     });
 
     test('Should return true if validation passed', async () => {
-      await User.destroy({ where: {} });
-
       const validator = new RegisterUserValidator({
         name: 'Alex Dus',
-        email: 'sd@alexdus.com',
+        email: faker.internet.email(),
         password: 'pass12345',
       });
 
