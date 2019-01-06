@@ -1,3 +1,4 @@
+import faker from 'faker';
 import middleware from '../../../middleware';
 
 const { registerUserValidator } = middleware;
@@ -8,7 +9,7 @@ describe('Register User Validator Middleware', () => {
       body: {
         name: 'Alex Dus',
         password: 'password',
-        email: 'sd@alexdus.com',
+        email: faker.internet.email(),
       }
     };
 
