@@ -17,7 +17,7 @@ export default async (req, res, next) => {
     });
 
     if (!recipe) {
-      return res.sendFailureResponse({ message: 'Recipe not found.' }, 404);
+      throw new Error();
     }
 
     req.currentRecipe = recipe;
