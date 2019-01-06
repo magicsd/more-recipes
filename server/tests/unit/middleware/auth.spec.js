@@ -1,23 +1,16 @@
-import jwt from 'jsonwebtoken';
 import faker from 'faker';
 import middleware from '../../../middleware';
-import { User } from '../../../database/models';
-import config from '../../../config';
+import { generateToken, generateUser } from '../../utils/generate';
 
 const { auth } = middleware;
-const { JWT_SECRET } = config;
 
 describe('Auth Middleware Tests', () => {
   test('Should call "next" if user is authenticated', async () => {
-    const { email } = await User.create({
-      name: 'Alex Dus',
-      email: faker.internet.email(),
-      password: 'password',
-    });
+    const { token } = await generateUser();
 
     const request = {
       body: {
-        access_token: jwt.sign({ email }, JWT_SECRET),
+        access_token: token,
       },
     };
 
@@ -32,13 +25,7 @@ describe('Auth Middleware Tests', () => {
   });
 
   test('Should run "sendFailureResponse" function if not authenticated', async () => {
-    const { email } = await User.create({
-      name: 'Alex',
-      password: '123',
-      email: faker.internet.email(),
-    });
-
-    const request = {
+        const request = {
       body: {},
       query: {},
       headers: [],
@@ -58,7 +45,7 @@ describe('Auth Middleware Tests', () => {
   test('Should throw an error if the user is not found', async () => {
     const request = {
       body: {
-        access_token: jwt.sign({ email: faker.internet.email()}, JWT_SECRET),
+        access_token: generateToken(faker.internet.email()),
       },
     };
 
